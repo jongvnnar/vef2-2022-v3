@@ -208,3 +208,16 @@ export async function listRegistered(event) {
 export async function end() {
   await pool.end();
 }
+
+export async function removeEvent(id) {
+  const q = `
+  DELETE FROM events WHERE id = $1 RETURNING id, name, slug, description
+  `;
+
+  const result = await query(q, [id]);
+  if (result && result.rowCount === 1) {
+    return result.rows[0];
+  }
+
+  return null;
+}

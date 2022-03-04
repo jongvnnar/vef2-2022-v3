@@ -6,11 +6,13 @@ import {
   listEventByID,
   listEvents,
   listRegistered,
+  removeEvent,
   updateEvent,
 } from '../lib/db.js';
 import { slugify } from '../lib/slugify.js';
 import { validationCheck } from '../lib/validation-helpers.js';
 import {
+  atLeastOneBodyValueValidator,
   idValidator,
   noDuplicateEventsValidator,
   registrationValidationMiddleware,
@@ -80,6 +82,24 @@ async function updateRoute(req, res) {
   return res.status(500).json({ error: 'server error' });
 }
 
+async function deleteRoute(req, res) {
+  const { id } = req.params;
+  const { admin, id: userId } = req.user;
+
+  const event = await listEventByID(id);
+
+  if (event.createdby !== userId && !admin) {
+    return res.status(401).json({ error: 'Unauthorized to delete event' });
+  }
+
+  const deleted = await removeEvent(event.id);
+  if (deleted) {
+    return res.json({ success: true, deletedEvent: deleted });
+  }
+
+  return res.json({ success: false });
+}
+
 router.get('', catchErrors(getEventsRoute));
 router.post(
   '',
@@ -104,6 +124,7 @@ router.patch(
   '/:id',
   requireAuthentication,
   idValidator('id'),
+  atLeastOneBodyValueValidator(['name, description']),
   validateResourceExists(getEventRoute),
   noDuplicateEventsValidator,
   registrationValidationMiddleware('description'),
@@ -111,4 +132,13 @@ router.patch(
   validationCheck,
   sanitizationMiddleware(['name, description']),
   catchErrors(updateRoute)
+);
+
+router.delete(
+  '/:id',
+  requireAuthentication,
+  idValidator('id'),
+  validateResourceExists(getEventRoute),
+  validationCheck,
+  catchErrors(deleteRoute)
 );
