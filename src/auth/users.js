@@ -1,14 +1,14 @@
 import bcrypt from 'bcrypt';
-import { query } from './db.js';
+import dotenv from 'dotenv';
+import xss from 'xss';
+import { query } from '../lib/db.js';
+
+dotenv.config();
+
+const { BCRYPT_ROUNDS: bcryptRounds = 1 } = process.env;
 
 export async function comparePasswords(password, hash) {
-  try {
-    return await bcrypt.compare(password, hash);
-  } catch (e) {
-    console.error('Gat ekki borið saman lykilorð', e);
-  }
-
-  return false;
+  return await bcrypt.compare(password, hash);
 }
 
 export async function findByUsername(username) {
@@ -44,19 +44,22 @@ export async function findById(id) {
   return null;
 }
 
-export async function createUser(username, password) {
+export async function createUser(name, username, password) {
   // Geymum hashað password!
-  const hashedPassword = await bcrypt.hash(password, 11);
-
+  const hashedPassword = await bcrypt.hash(
+    password,
+    parseInt(bcryptRounds, 10)
+  );
+  console.log(hashedPassword);
   const q = `
     INSERT INTO
-      users (username, password)
-    VALUES ($1, $2)
+      users (name, username, password)
+    VALUES ($1, $2, $3)
     RETURNING *
   `;
 
   try {
-    const result = await query(q, [username, hashedPassword]);
+    const result = await query(q, [xss(name), xss(username), hashedPassword]);
     return result.rows[0];
   } catch (e) {
     console.error('Gat ekki búið til notanda');
