@@ -109,7 +109,7 @@ router.post(
 
 router.get('', requireAuthentication, requireAdmin, catchErrors(userRoute));
 
-// router.get('/users/me', requireAuthentication, catchErrors(currentUserRoute));
+router.get('/me', requireAuthentication, catchErrors(currentUserRoute));
 
 // router.patch(
 //   '/users/me',
