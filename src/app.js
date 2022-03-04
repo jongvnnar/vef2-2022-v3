@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import passport from './auth/passport.js';
+import { router as eventsRouter } from './routes/events-routes.js';
 import { router as userRouter } from './routes/user-routes.js';
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/users', userRouter);
+app.use('/events', eventsRouter);
 // app.use('/admin', adminRouter);
 // app.use('/', indexRouter);
 

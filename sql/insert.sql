@@ -7,7 +7,7 @@ INSERT INTO users (id, name, username, password) VALUES (2, 'Jón Gunnar', 'jon'
 
 INSERT INTO registrations (comment, event, registrant) VALUES ('Hlakka til að forrita með ykkur', 1, 1);
 INSERT INTO registrations (comment, event, registrant) VALUES (null, 1, 1);
-INSERT INTO registrations (comment, event, registrant) VALUES ('verður vefforritað?', 1, 2);
+INSERT INTO registrations (comment, event, registrant) VALUES ('verður vefforritað?', 2, 2);
 
 
 -- Verð að hafa þetta fyrst ég harðkóða id á inserted hlutum í byrjun

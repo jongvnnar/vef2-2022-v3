@@ -174,10 +174,10 @@ export async function listEventByName(name) {
 export async function listRegistered(event) {
   const q = `
     SELECT
-      id, name, comment
+      registrations.id as registrationId, registrations.registrant as userId,users.name, users.username, registrations.comment, registrations.created
     FROM
-      registrations
-    WHERE event = $1
+      registrations, users
+    WHERE event = $1 AND users.id = registrations.registrant ORDER BY registrations.created ASC
   `;
 
   const result = await query(q, [event]);
@@ -186,7 +186,7 @@ export async function listRegistered(event) {
     return result.rows;
   }
 
-  return null;
+  return [];
 }
 
 export async function end() {
