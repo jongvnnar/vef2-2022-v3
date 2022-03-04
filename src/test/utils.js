@@ -9,6 +9,8 @@ const {
   PORT: port = '5000',
   ADMIN_USER: adminUser = '',
   ADMIN_PASS: adminPass = '',
+  TEST_USER: testUser = '',
+  TEST_PASS: testPass = '',
 } = process.env;
 
 const baseUrl = `http://localhost:${port}`;
@@ -52,12 +54,12 @@ export async function fetchAndParse(path, token = null) {
   return methodAndParse('GET', path, null, token);
 }
 
-export async function postAndParse(path, data, token = null, imagePath) {
-  return methodAndParse('POST', path, data, token, imagePath);
+export async function postAndParse(path, data, token = null) {
+  return methodAndParse('POST', path, data, token);
 }
 
-export async function patchAndParse(path, data, token = null, imagePath) {
-  return methodAndParse('PATCH', path, data, token, imagePath);
+export async function patchAndParse(path, data, token = null) {
+  return methodAndParse('PATCH', path, data, token);
 }
 
 export async function deleteAndParse(path, data, token = null) {
@@ -93,6 +95,14 @@ export async function loginAsHardcodedAdminAndReturnToken() {
   const result = await loginAndReturnToken({
     username: adminUser,
     password: adminPass,
+  });
+  return result;
+}
+
+export async function loginAsHardcodedTestUserAndReturnToken() {
+  const result = await loginAndReturnToken({
+    username: testUser,
+    password: testPass,
   });
   return result;
 }

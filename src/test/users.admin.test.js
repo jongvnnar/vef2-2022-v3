@@ -1,18 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
-import { createSchema, dropSchema, end, insertData } from '../lib/db.js';
 import { fetchAndParse, loginAsHardcodedAdminAndReturnToken } from './utils.js';
 
 describe('users - admin', () => {
-  beforeAll(async () => {
-    await dropSchema();
-    await createSchema();
-    await insertData();
-  });
-
-  afterAll(async () => {
-    await end();
-  });
-
   test('/users returns page of users if user is admin', async () => {
     const token = await loginAsHardcodedAdminAndReturnToken();
     const { result, status } = await fetchAndParse('/users', token);

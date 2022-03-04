@@ -169,13 +169,13 @@ router.patch(
   '/:id',
   requireAuthentication,
   idValidator('id'),
-  atLeastOneBodyValueValidator(['name, description']),
+  atLeastOneBodyValueValidator(['name', 'description']),
   validateResourceExists(getEventRoute),
   noDuplicateEventsValidator,
   registrationValidationMiddleware('description'),
-  xssSanitizationMiddleware(['name, description']),
+  xssSanitizationMiddleware(['name', 'description']),
   validationCheck,
-  sanitizationMiddleware(['name, description']),
+  sanitizationMiddleware(['name', 'description']),
   catchErrors(updateRoute)
 );
 

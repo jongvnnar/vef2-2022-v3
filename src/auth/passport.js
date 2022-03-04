@@ -47,8 +47,7 @@ export function requireAuthentication(req, res, next) {
     }
 
     if (!user) {
-      const error =
-        info.name === 'TokenExpiredError' ? 'expired token' : 'invalid token';
+      const error = 'invalid token';
 
       return res.status(401).json({ error });
     }
