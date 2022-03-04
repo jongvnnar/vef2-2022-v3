@@ -45,12 +45,12 @@ describe('users', () => {
   });
 
   test('Create user, too short password', async () => {
-    const data = { username, password: '123', name };
+    const data = { username, password: '', name };
     const { result, status } = await postAndParse('/users/register', data);
     expect(status).toBe(400);
     expect(result.errors.length).toBe(1);
     expect(result.errors[0].msg).toEqual(
-      'password is required, min 6 characters, max 256 characters'
+      'password is required, max 256 characters'
     );
   });
 
@@ -89,7 +89,7 @@ describe('users', () => {
     expect(status).toBe(400);
     expect(result.errors.length).toBe(1);
     expect(result.errors[0].msg).toBe(
-      'password is required, min 6 characters, max 256 characters'
+      'password is required, max 256 characters'
     );
   });
 
