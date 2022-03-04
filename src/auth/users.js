@@ -50,7 +50,6 @@ export async function createUser(name, username, password) {
     password,
     parseInt(bcryptRounds, 10)
   );
-  console.log(hashedPassword);
   const q = `
     INSERT INTO
       users (name, username, password)
@@ -75,7 +74,6 @@ export async function listUsers() {
 
   try {
     const result = await query(q);
-    console.log(result);
     return result.rows;
   } catch (e) {
     console.error('Gat ekki fundið lista af notendum');

@@ -23,15 +23,12 @@ export function registrationValidationMiddleware(textField) {
 }
 
 // Viljum keyra sér og með validation, ver gegn „self XSS“
-export function xssSanitizationMiddleware(textField) {
-  return [
-    body('name').customSanitizer((v) => xss(v)),
-    body(textField).customSanitizer((v) => xss(v)),
-  ];
+export function xssSanitizationMiddleware(fields) {
+  return fields.map((field) => body(field).customSanitizer((v) => xss(v)));
 }
 
-export function sanitizationMiddleware(textField) {
-  return [body('name').trim().escape(), body(textField).trim().escape()];
+export function sanitizationMiddleware(fields) {
+  return fields.map((field) => body(field).trim().escape());
 }
 
 export function atLeastOneBodyValueValidator(fields) {

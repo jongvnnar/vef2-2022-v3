@@ -17,15 +17,14 @@ const app = express();
 app.use(express.json());
 app.use(passport.initialize());
 
-//Sja til þess að content-type sé json eða form-data í post og patch requestum, fengið frá sýnilausn hopverkefni 1 2021
+//Sja til þess að content-type sé json í post og patch requestum, fengið frá sýnilausn hopverkefni 1 2021
 app.use((req, res, next) => {
   if (req.method === 'POST' || req.method === 'PATCH') {
     if (
       req.headers['content-type'] &&
-      req.headers['content-type'] !== 'application/json' &&
-      !req.headers['content-type'].startsWith('multipart/form-data;')
+      req.headers['content-type'] !== 'application/json'
     ) {
-      return res.status(400).json({ error: 'body must be json or form-data' });
+      return res.status(400).json({ error: 'body must be json' });
     }
   }
   return next();

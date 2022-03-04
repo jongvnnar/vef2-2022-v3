@@ -1,5 +1,4 @@
 import { body, param } from 'express-validator';
-import xss from 'xss';
 import { resourceExists } from '../lib/validation-helpers.js';
 import { LoginError } from './login-error.js';
 import { comparePasswords, findByUsername } from './users.js';
@@ -60,13 +59,3 @@ export const adminValidator = body('admin')
   .isBoolean()
   .withMessage('admin must be a boolean')
   .bail();
-
-export const loginXssSanitization = [
-  body('name').customSanitizer((v) => xss(v)),
-  body('password').customSanitizer((v) => xss(v)),
-];
-
-export const loginSanitization = [
-  body('name').trim().escape(),
-  body('password').trim().escape(),
-];

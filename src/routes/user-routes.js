@@ -13,14 +13,17 @@ import {
   listUsers,
 } from '../auth/users.js';
 import {
-  loginSanitization,
-  loginXssSanitization,
   passwordValidator,
   usernameAndPaswordValidValidator,
+  usernameDoesNotExistValidator,
   usernameValidator,
 } from '../auth/validation.js';
 import { catchErrors } from '../lib/catch-errors.js';
 import { validationCheck } from '../lib/validation-helpers.js';
+import {
+  sanitizationMiddleware,
+  xssSanitizationMiddleware,
+} from '../lib/validation.js';
 
 /**
  * Skilgreinir API fyrir nýskráningu, innskráningu notanda, ásamt því að skila
@@ -80,23 +83,27 @@ async function currentUserRoute(req, res) {
   return res.json(user);
 }
 
+const registrationFields = ['username', 'password', 'name'];
 router.post(
   '/register',
   usernameValidator,
   passwordValidator,
   usernameDoesNotExistValidator,
   validationCheck,
+  xssSanitizationMiddleware(registrationFields),
+  sanitizationMiddleware(registrationFields),
   catchErrors(registerRoute)
 );
 
+const loginFields = ['username', 'password'];
 router.post(
   '/login',
   usernameValidator,
   passwordValidator,
   usernameAndPaswordValidValidator,
   validationCheck,
-  loginXssSanitization,
-  loginSanitization,
+  xssSanitizationMiddleware(loginFields),
+  sanitizationMiddleware(loginFields),
   catchErrors(loginRoute)
 );
 
