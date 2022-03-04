@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import dotenv from 'dotenv';
+import { createSchema, dropSchema, end, insertData } from '../lib/db.js';
 import {
   fetchAndParse,
   loginAndReturnToken,
@@ -10,6 +11,15 @@ import {
 dotenv.config();
 const { TOKEN_LIFETIME: tokenLifetime = '3600' } = process.env;
 describe('users', () => {
+  beforeAll(async () => {
+    await dropSchema();
+    await createSchema();
+    await insertData();
+  });
+
+  afterAll(async () => {
+    await end();
+  });
   // Random username for all the following tests, highly unlikely we'll create
   // the same user twice
   const rnd = randomValue();

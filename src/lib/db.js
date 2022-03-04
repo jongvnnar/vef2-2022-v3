@@ -3,6 +3,7 @@ import pg from 'pg';
 
 const SCHEMA_FILE = './sql/schema.sql';
 const DROP_SCHEMA_FILE = './sql/drop.sql';
+const INSERT_DATA_FILE = './sql/insert.sql';
 
 const { DATABASE_URL: connectionString, NODE_ENV: nodeEnv = 'development' } =
   process.env;
@@ -55,6 +56,12 @@ export async function dropSchema(dropFile = DROP_SCHEMA_FILE) {
   const data = await readFile(dropFile);
 
   return query(data.toString('utf-8'));
+}
+
+export async function insertData(insertFile = INSERT_DATA_FILE) {
+  const data = await readFile('./sql/insert.sql');
+  const insert = await query(data.toString('utf-8'));
+  return insert;
 }
 
 export async function createEvent({ name, slug, description, id } = {}) {

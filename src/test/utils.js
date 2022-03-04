@@ -42,7 +42,6 @@ export async function methodAndParse(method, path, data = null, token = null) {
   }
 
   const result = await fetch(url, options);
-
   return {
     result: await result.json(),
     status: result.status,
@@ -67,7 +66,6 @@ export async function deleteAndParse(path, data, token = null) {
 
 export async function loginAndReturnToken(data) {
   const { result } = await postAndParse('/users/login', data);
-
   if (result && result.token) {
     return result.token;
   }
@@ -96,5 +94,5 @@ export async function loginAsHardcodedAdminAndReturnToken() {
     username: adminUser,
     password: adminPass,
   });
-  return result.token;
+  return result;
 }
