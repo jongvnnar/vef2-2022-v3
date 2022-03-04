@@ -2,7 +2,6 @@
 
 Notandi að síðu stjórnenda er 'admin' og password hans 'adminPassword'.
 
-
 Aðrir notendur eru 'jon' með password 'password' og 'gunni' með password 'password'.
 
 ## Vefsíða
