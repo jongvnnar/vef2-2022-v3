@@ -41,7 +41,7 @@ export function addUserIfAuthenticated(req, res, next) {
 }
 
 export function requireAuthentication(req, res, next) {
-  return passport.authenticate('jwt', { session: false }, (err, user, info) => {
+  return passport.authenticate('jwt', { session: false }, (err, user) => {
     if (err) {
       return next(err);
     }

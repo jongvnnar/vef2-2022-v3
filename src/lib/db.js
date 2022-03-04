@@ -59,7 +59,7 @@ export async function dropSchema(dropFile = DROP_SCHEMA_FILE) {
 }
 
 export async function insertData(insertFile = INSERT_DATA_FILE) {
-  const data = await readFile('./sql/insert.sql');
+  const data = await readFile(insertFile);
   const insert = await query(data.toString('utf-8'));
   return insert;
 }
