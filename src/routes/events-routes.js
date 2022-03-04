@@ -1,13 +1,21 @@
 import express from 'express';
 import { requireAuthentication } from '../auth/passport.js';
 import { catchErrors } from '../lib/catch-errors.js';
-import { createEvent, listEvents, listRegistered } from '../lib/db.js';
+import {
+  createEvent,
+  listEventByID,
+  listEvents,
+  listRegistered,
+  updateEvent,
+} from '../lib/db.js';
 import { slugify } from '../lib/slugify.js';
 import { validationCheck } from '../lib/validation-helpers.js';
 import {
+  idValidator,
   noDuplicateEventsValidator,
   registrationValidationMiddleware,
   sanitizationMiddleware,
+  validateResourceExists,
   xssSanitizationMiddleware,
 } from '../lib/validation.js';
 
@@ -37,6 +45,41 @@ async function postEventsRoute(req, res) {
   return res.json(created);
 }
 
+function returnResource(req, res) {
+  return res.json(req.resource);
+}
+
+async function getEventRoute(_, req) {
+  const { params: { id } = {} } = req;
+  const event = await listEventByID(id);
+  return event;
+}
+
+async function updateRoute(req, res) {
+  const { name, description } = req.body;
+  const { id } = req.params;
+  const { admin, id: userId } = req.user;
+
+  const event = await listEventByID(id);
+
+  const newSlug = slugify(name);
+  if (event.createdby !== userId && !admin) {
+    return res.status(401).json({ error: 'Unauthorized to update event' });
+  }
+
+  const updated = await updateEvent(event.id, {
+    name,
+    slug: newSlug,
+    description,
+  });
+
+  if (updated) {
+    return res.json(updated);
+  }
+
+  return res.status(500).json({ error: 'server error' });
+}
+
 router.get('', catchErrors(getEventsRoute));
 router.post(
   '',
@@ -47,4 +90,25 @@ router.post(
   validationCheck,
   sanitizationMiddleware(['name', 'description']),
   catchErrors(postEventsRoute)
+);
+
+router.get(
+  '/:id',
+  idValidator('id'),
+  validateResourceExists(getEventRoute),
+  validationCheck,
+  returnResource
+);
+
+router.patch(
+  '/:id',
+  requireAuthentication,
+  idValidator('id'),
+  validateResourceExists(getEventRoute),
+  noDuplicateEventsValidator,
+  registrationValidationMiddleware('description'),
+  xssSanitizationMiddleware(['name, description']),
+  validationCheck,
+  sanitizationMiddleware(['name, description']),
+  catchErrors(updateRoute)
 );

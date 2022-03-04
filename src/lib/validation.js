@@ -1,7 +1,7 @@
 import { body, param } from 'express-validator';
 import xss from 'xss';
 import { listEventByName } from './db.js';
-
+import { resourceExists } from './validation-helpers.js';
 // Endurnýtum mjög líka validation
 
 export function registrationValidationMiddleware(textField) {
@@ -72,4 +72,19 @@ export function atLeastOneBodyValueValidator(fields) {
     }
     return Promise.resolve();
   });
+}
+
+export function validateResourceExists(fetchResource) {
+  return [
+    param('id').custom(resourceExists(fetchResource)).withMessage('not found'),
+  ];
+}
+
+export function validateResourceNotExists(fetchResource) {
+  return [
+    param('id')
+      .not()
+      .custom(resourceExists(fetchResource))
+      .withMessage('already exists'),
+  ];
 }

@@ -152,6 +152,22 @@ export async function listEvent(slug) {
   return null;
 }
 
+export async function listEventByID(id) {
+  const q = `
+    SELECT
+      id, name, slug, description, created, updated, createdBy
+    FROM
+      events
+    WHERE id = $1
+  `;
+  const result = await query(q, [id]);
+
+  if (result && result.rowCount === 1) {
+    return result.rows[0];
+  }
+  return null;
+}
+
 // TODO gætum fellt þetta fall saman við það að ofan
 export async function listEventByName(name) {
   const q = `

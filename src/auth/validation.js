@@ -1,12 +1,6 @@
-import { body, param } from 'express-validator';
-import { resourceExists } from '../lib/validation-helpers.js';
+import { body } from 'express-validator';
 import { LoginError } from './login-error.js';
 import { comparePasswords, findByUsername } from './users.js';
-export function validateResourceExists(fetchResource) {
-  return [
-    param('id').custom(resourceExists(fetchResource)).withMessage('not found'),
-  ];
-}
 
 export const usernameValidator = body('username')
   .isLength({ min: 1, max: 64 })
