@@ -8,7 +8,8 @@ dotenv.config();
 const { BCRYPT_ROUNDS: bcryptRounds = 1 } = process.env;
 
 export async function comparePasswords(password, hash) {
-  return await bcrypt.compare(password, hash);
+  const result = await bcrypt.compare(password, hash);
+  return result;
 }
 
 export async function findByUsername(username) {

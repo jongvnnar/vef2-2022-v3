@@ -18,7 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(passport.initialize());
 
-//Sja til þess að content-type sé json í post og patch requestum, fengið frá sýnilausn hopverkefni 1 2021
+// Sja til þess að content-type sé json í post og patch requestum, fengið frá sýnilausn hopverkefni 1 2021
 app.use((req, res, next) => {
   if (req.method === 'POST' || req.method === 'PATCH') {
     if (

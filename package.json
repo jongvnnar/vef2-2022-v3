@@ -13,9 +13,7 @@
     "test-watch": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' dotenv -e .env.test -- jest ./*.test.js",
     "coverage": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' dotenv -e .env.test -- jest --coverage --collectCoverageFrom=\"./src/**/*.js\"",
     "prettier": "prettier --write .",
-    "lint": "concurrently npm:lint:*",
-    "lint:eslint": "eslint ./src/**/*.js",
-    "lint:stylelint": "stylelint ./public/styles.css"
+    "lint": "eslint ./src/**/*.js"
   },
   "keywords": [],
   "author": "",
@@ -35,7 +33,6 @@
     "xss": "^1.0.10"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.0.0-alpha.5",
     "@jest/globals": "^27.5.1",
     "concurrently": "^7.0.0",
     "eslint": "^8.8.0",
@@ -44,9 +41,6 @@
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.4.7",
     "nodemon": "^2.0.15",
-    "prettier": "^2.5.1",
-    "stylelint": "^14.3.0",
-    "stylelint-config-sass-guidelines": "^9.0.1",
-    "stylelint-config-standard": "^24.0.0"
+    "prettier": "^2.5.1"
   }
 }

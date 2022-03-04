@@ -8,11 +8,11 @@ Bæta skal við vefþjónustum við viðburðakerfið með notendaskráningu ás
 
 Eftirfarandi eru markmið verkefnisins:
 
-* Búa til og hanna vefþjónustur
-* Framkvæma _CRUD_ aðgerðir gegnum vefþjónustlag með staðfestingu og hreinsun gagna
-* Setja upp auðkenningu með JWT tokens, innskráningu og nýskráningu
-* Skrifa „integration test“ fyrir vefþjónustu
-* Prófanir og debug á vefþjónustum
+- Búa til og hanna vefþjónustur
+- Framkvæma _CRUD_ aðgerðir gegnum vefþjónustlag með staðfestingu og hreinsun gagna
+- Setja upp auðkenningu með JWT tokens, innskráningu og nýskráningu
+- Skrifa „integration test“ fyrir vefþjónustu
+- Prófanir og debug á vefþjónustum
 
 ## Notendaumsjón
 
@@ -20,11 +20,11 @@ Eftirfarandi eru markmið verkefnisins:
 
 Geyma skal gögn fyrir notanda í töflu í gagnagrunni:
 
-* `id` primary key fyrir töflu
-* `name`, nafn notanda, krafist, hámark 64 stafir
-* `username` einkvæmt og krafist, hámark 64 stafir
-* `password` krafist, hámark 256 stafir
-* `admin`, boolean gildi um hvort notandi sé stjórnandi eða ekki
+- `id` primary key fyrir töflu
+- `name`, nafn notanda, krafist, hámark 64 stafir
+- `username` einkvæmt og krafist, hámark 64 stafir
+- `password` krafist, hámark 256 stafir
+- `admin`, boolean gildi um hvort notandi sé stjórnandi eða ekki
 
 Útbúa skal a.m.k. einn notanda með gefið notendanafn lykilorð í `readme` í skilum.
 
@@ -34,7 +34,7 @@ Huga þarf að öryggi, sér í lagi að aðeins sé hægt að framkvæma aðger
 
 ## Vefþjónustur
 
-Þegar þau eru send á bakenda skal framkvæma _validation_  og _sanitization_ á gögnum áður en þau eru vistuð í gagnagrunn.
+Þegar þau eru send á bakenda skal framkvæma _validation_ og _sanitization_ á gögnum áður en þau eru vistuð í gagnagrunn.
 
 Ef villur eru í gögnum skal birta það á framenda ásamt þeim gildum sem komu fram.
 
@@ -42,34 +42,34 @@ Huga þarf að öryggi, sér í lagi að engar _xss_ holur séu til staðar. Ley
 
 ### Notendaumsjón, vefþjónustur
 
-* `/users/`
-  * `GET` skilar síðu af notendum, aðeins ef notandi sem framkvæmir er stjórnandi
-* `/users/:id`
-  * `GET` skilar notanda, aðeins ef notandi sem framkvæmir er stjórnandi
-* `/users/register`
-  * `POST` staðfestir og býr til notanda. Skilar auðkenni og nafn. Notandi sem búinn er til skal aldrei vera stjórnandi
-* `/users/login`
-  * `POST` með notandanafni og lykilorði skilar token ef gögn rétt
-* `/users/me`
-  * `GET` skilar upplýsingum um notanda sem á token, auðkenni og nafn, aðeins ef notandi innskráður
+- `/users/`
+  - `GET` skilar síðu af notendum, aðeins ef notandi sem framkvæmir er stjórnandi
+- `/users/:id`
+  - `GET` skilar notanda, aðeins ef notandi sem framkvæmir er stjórnandi
+- `/users/register`
+  - `POST` staðfestir og býr til notanda. Skilar auðkenni og nafn. Notandi sem búinn er til skal aldrei vera stjórnandi
+- `/users/login`
+  - `POST` með notandanafni og lykilorði skilar token ef gögn rétt
+- `/users/me`
+  - `GET` skilar upplýsingum um notanda sem á token, auðkenni og nafn, aðeins ef notandi innskráður
 
 Aldrei skal skila eða sýna hash fyrir lykilorð.
 
 ### Viðburðir
 
-* `/events/`
-  * `GET` skilar síðu af viðburðum
-  * `POST` býr til vibðurð, aðeins ef innskráður notandi
-* `/events/:id`
-  * `GET` skilar viðburð
-  * `PATCH` uppfærir viðburð, a.m.k. eitt gildi, aðeins ef notandi bjó til viðburð eða er stjórnandi
-  * `DELETE` eyðir viðburð, aðeins ef notandi bjó til viðburð eða er stjórnandi
+- `/events/`
+  - `GET` skilar síðu af viðburðum
+  - `POST` býr til vibðurð, aðeins ef innskráður notandi
+- `/events/:id`
+  - `GET` skilar viðburð
+  - `PATCH` uppfærir viðburð, a.m.k. eitt gildi, aðeins ef notandi bjó til viðburð eða er stjórnandi
+  - `DELETE` eyðir viðburð, aðeins ef notandi bjó til viðburð eða er stjórnandi
 
 ### Skráningar
 
-* `/events/:id/register`
-  * `POST` skráir notanda á viðburð, aðeins ef innskráður notandi
-  * `DELETE` afskráir notanda af viðburði, aðeins ef innskráður notandi og til skráning
+- `/events/:id/register`
+  - `POST` skráir notanda á viðburð, aðeins ef innskráður notandi
+  - `DELETE` afskráir notanda af viðburði, aðeins ef innskráður notandi og til skráning
 
 ## Postgres grunnur
 
@@ -77,26 +77,26 @@ Vista skal gögn í postgres gagnagrunni, hér er skilgreining á grunni frá þ
 
 Fyrir viðburði:
 
-* `id` primary key fyrir töflu
-* `name` krafist, nafn á viðburði hámark 64 stafir, t.d. `Hönnuðahittingur í mars`
-* `slug` útbúið útfrá nafni hámark 64 stafir, krafist, útbúið útfrá `name` þ.a. aðeins `ASCII` stafir séu notaðir og `-` í staðinn fyrir bil, t.d. `honnudahittingur-i-mars`
-* `description`, texti, valkvæmt
-* `created`, dagstími þegar færsla var búin til
-* `updated`, dagstími þegar færslu var breytt
+- `id` primary key fyrir töflu
+- `name` krafist, nafn á viðburði hámark 64 stafir, t.d. `Hönnuðahittingur í mars`
+- `slug` útbúið útfrá nafni hámark 64 stafir, krafist, útbúið útfrá `name` þ.a. aðeins `ASCII` stafir séu notaðir og `-` í staðinn fyrir bil, t.d. `honnudahittingur-i-mars`
+- `description`, texti, valkvæmt
+- `created`, dagstími þegar færsla var búin til
+- `updated`, dagstími þegar færslu var breytt
 
 Fyrir skráningar:
 
-* `id` primary key fyrir töflu
-* `name` krafist, nafn á þeim sem skráir sig, hámark 64 stafir
-* `comment` valkvæmt, athugasemd við skráningu
-* `event` tala, krafist, vísun í `id` í viðburðatöflu
-* `created`, dagstími þegar færsla var búin til
+- `id` primary key fyrir töflu
+- `name` krafist, nafn á þeim sem skráir sig, hámark 64 stafir
+- `comment` valkvæmt, athugasemd við skráningu
+- `event` tala, krafist, vísun í `id` í viðburðatöflu
+- `created`, dagstími þegar færsla var búin til
 
 Bæta þarf við:
 
-* `name` við notendatöflu
-* Tengingu viðburða við notanda sem bjó hann til í stað þess að skráning hafi `name`. Skráningartaflan verður _tengitafla_ milli notenda og viðburða sem á sér `comment` við þá skráningu
-* Virkni til þess að eyða viðburðum m.t.t. þess að tenging er milli skráninga og viðburðs og hvað gera eigi við þær skráningar
+- `name` við notendatöflu
+- Tengingu viðburða við notanda sem bjó hann til í stað þess að skráning hafi `name`. Skráningartaflan verður _tengitafla_ milli notenda og viðburða sem á sér `comment` við þá skráningu
+- Virkni til þess að eyða viðburðum m.t.t. þess að tenging er milli skráninga og viðburðs og hvað gera eigi við þær skráningar
 
 Huga þarf að öryggi, sér í lagi að engar _injection_ holur séu til staðar.
 
@@ -116,9 +116,9 @@ Skrá skal og setja dæmi um það hvernig kalla eigi á vefþjónustur með cUR
 
 ## Mat
 
-* 50% Vefþjónustur, útfærsla og tenging við gagnagrunn
-* 30% Notendausmjón með nýskráningu og innskráningu með JWT
-* 20% Tæki, tól og test, verkefni sett upp á Heroku, dæmi um köll
+- 50% Vefþjónustur, útfærsla og tenging við gagnagrunn
+- 30% Notendausmjón með nýskráningu og innskráningu með JWT
+- 20% Tæki, tól og test, verkefni sett upp á Heroku, dæmi um köll
 
 ## Sett fyrir
 
@@ -130,17 +130,17 @@ Skila skal í Canvas í seinasta lagi fyrir lok dags föstudaginn 4. mars 2022.
 
 Skil skulu innihalda:
 
-* Slóð á verkefni keyrandi á Heroku
-* Slóð á GitHub repo fyrir verkefni. Dæmatímakennurum skal hafa verið boðið í repo. Notendanöfn þeirra eru:
-  * `MarzukIngi`
-  * `WhackingCheese`
+- Slóð á verkefni keyrandi á Heroku
+- Slóð á GitHub repo fyrir verkefni. Dæmatímakennurum skal hafa verið boðið í repo. Notendanöfn þeirra eru:
+  - `MarzukIngi`
+  - `WhackingCheese`
 
 ---
 
 > Útgáfa 0.2
 
-| Útgáfa | Breyting                                     |
-|--------|----------------------------------------------|
-| 0.1    | Fyrsta útgáfa                                |
+| Útgáfa | Breyting                                                                   |
+| ------ | -------------------------------------------------------------------------- |
+| 0.1    | Fyrsta útgáfa                                                              |
 | 0.2    | Fjarlægja `stylelint`, laga lýsingu á testum, fjarlægja netfang úr lýsingu |
-| 0.3 | Bæta við `admin` í notendatöflu |
+| 0.3    | Bæta við `admin` í notendatöflu                                            |

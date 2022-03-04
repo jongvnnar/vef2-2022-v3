@@ -107,7 +107,6 @@ export async function register({ registrant, comment, event } = {}) {
     RETURNING
       id, registrant, comment, event;
   `;
-  console.log(registrant);
   const values = [registrant, comment, event];
   const result = await query(q, values);
 

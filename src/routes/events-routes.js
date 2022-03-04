@@ -119,7 +119,6 @@ async function registerRoute(req, res) {
   const { id: userId, name, username } = req.user;
   const event = await listEventByID(id);
 
-  console.log(userId);
   const registered = await register({
     registrant: userId,
     comment,
@@ -135,7 +134,6 @@ async function registerRoute(req, res) {
 }
 
 async function deleteRegistrationRoute(req, res) {
-  console.log(req.user);
   const { id } = req.params;
   const { id: userId, name, username } = req.user;
   const deleted = await removeUserRegistration(id, userId);

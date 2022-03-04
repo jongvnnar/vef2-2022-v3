@@ -33,7 +33,7 @@ import {
 
 export const router = express.Router();
 
-//TODO breyta þessu í paging.
+// TODO breyta þessu í paging.
 async function usersRoute(_req, res) {
   const userList = await listUsers();
   return res.status(200).json(userList);
