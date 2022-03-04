@@ -7,6 +7,7 @@ Aðrir notendur eru 'jon' með password 'password' og 'gunni' með password 'pas
 Verkefnið keyrir á vefsíðunni https://jgh-vef2-verk3.herokuapp.com/
 
 ## Keyrsla
+.env file er í repo en þar hef ég skýrt gagnagrunninn vef2-v3
 ```
 createdb vef2-v3
 npm install
@@ -26,7 +27,7 @@ npm run prettier
 ```
 
 ## Test
-.env.test file er í github repo, en þarf hef ég skýrt test gagnagrunninn 
+.env.test file er í github repo, en þarf hef ég skýrt test gagnagrunninn vef2-v3-test
 
 Test eru keyrð með:
 ```
