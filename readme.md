@@ -1,6 +1,8 @@
 # Vefforritun 2, 2022. Verkefni 3: Viðburðakerfi
 
 Notandi að síðu stjórnenda er 'admin' og password hans 'adminPassword'.
+
+
 Aðrir notendur eru 'jon' með password 'password' og 'gunni' með password 'password'.
 
 ## Vefsíða
