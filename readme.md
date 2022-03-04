@@ -9,7 +9,6 @@ Verkefnið keyrir á vefsíðunni https://jgh-vef2-verk3.herokuapp.com/
 ## Keyrsla
 ```
 createdb vef2-v3
-# setja upp .env & .env.test með tengingu í gagnagrunna
 npm install
 npm run setup
 npm start # eða `npm run dev`
