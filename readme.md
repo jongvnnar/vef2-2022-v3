@@ -70,6 +70,7 @@ curl --location --request GET 'https://jgh-vef2-verk3.herokuapp.com/users/me' \
 --header 'Authorization: Bearer YOUR_TOKEN' \
 --header 'Content-Type: application/json' \
 ```
+```
 curl --location --request POST 'https://jgh-vef2-verk3.herokuapp.com/events' \
 --header 'Authorization: Bearer YOUR_TOKEN' \
 --header 'Content-Type: application/json' \
