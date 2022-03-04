@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body, param } from 'express-validator';
 import xss from 'xss';
 
 // Endurnýtum mjög líka validation
@@ -19,6 +19,14 @@ export function registrationValidationMiddleware(textField) {
           textField === 'comment' ? 'Athugasemd' : 'Lýsing'
         } má að hámarki vera 400 stafir`
       ),
+  ];
+}
+
+export function idValidator(idName) {
+  return [
+    param(idName)
+      .isInt({ min: 1 })
+      .withMessage(`${idName} must be an integer larger than 0`),
   ];
 }
 

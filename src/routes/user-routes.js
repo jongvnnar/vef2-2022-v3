@@ -21,6 +21,7 @@ import {
 import { catchErrors } from '../lib/catch-errors.js';
 import { validationCheck } from '../lib/validation-helpers.js';
 import {
+  idValidator,
   sanitizationMiddleware,
   xssSanitizationMiddleware,
 } from '../lib/validation.js';
@@ -33,9 +34,22 @@ import {
 export const router = express.Router();
 
 //TODO breyta þessu í paging.
-async function userRoute(req, res) {
+async function usersRoute(_req, res) {
   const userList = await listUsers();
   return res.status(200).json(userList);
+}
+
+async function userRoute(req, res) {
+  const { params: { userId } = {} } = req;
+  const user = await findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
+  }
+
+  delete user.password;
+
+  return res.json(user);
 }
 
 async function registerRoute(req, res) {
@@ -107,16 +121,15 @@ router.post(
   catchErrors(loginRoute)
 );
 
-router.get('', requireAuthentication, requireAdmin, catchErrors(userRoute));
+router.get('', requireAuthentication, requireAdmin, catchErrors(usersRoute));
 
 router.get('/me', requireAuthentication, catchErrors(currentUserRoute));
 
-// router.patch(
-//   '/users/me',
-//   requireAuthentication,
-//   passwordValidator,
-//   emailDoesNotExistValidator,
-//   atLeastOneBodyValueValidator(['email', 'password']),
-//   validationCheck,
-//   catchErrors(updateCurrentUserRoute)
-// );
+router.get(
+  '/:userId',
+  requireAuthentication,
+  requireAdmin,
+  idValidator('userId'),
+  validationCheck,
+  catchErrors(userRoute)
+);
