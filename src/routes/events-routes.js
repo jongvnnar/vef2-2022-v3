@@ -3,21 +3,26 @@ import { requireAuthentication } from '../auth/passport.js';
 import { catchErrors } from '../lib/catch-errors.js';
 import {
   createEvent,
+  getUserEventRegistration,
   listEventByID,
   listEvents,
   listRegistered,
+  register,
   removeEvent,
+  removeUserRegistration,
   updateEvent,
 } from '../lib/db.js';
 import { slugify } from '../lib/slugify.js';
 import { validationCheck } from '../lib/validation-helpers.js';
 import {
   atLeastOneBodyValueValidator,
+  bookingValidationMiddleware,
   idValidator,
   noDuplicateEventsValidator,
   registrationValidationMiddleware,
   sanitizationMiddleware,
   validateResourceExists,
+  validateResourceNotExists,
   xssSanitizationMiddleware,
 } from '../lib/validation.js';
 
@@ -54,7 +59,9 @@ function returnResource(req, res) {
 async function getEventRoute(_, req) {
   const { params: { id } = {} } = req;
   const event = await listEventByID(id);
-  return event;
+  if (!event) return null;
+  const registered = await listRegistered(event.id);
+  return { ...event, registered };
 }
 
 async function updateRoute(req, res) {
@@ -95,6 +102,46 @@ async function deleteRoute(req, res) {
   const deleted = await removeEvent(event.id);
   if (deleted) {
     return res.json({ success: true, deletedEvent: deleted });
+  }
+
+  return res.status(304).json({ success: false });
+}
+
+async function getRegistration(_, req) {
+  const { params: { id } = {}, user: { id: userId } = {} } = req;
+  const registration = await getUserEventRegistration(id, userId);
+  return registration;
+}
+
+async function registerRoute(req, res) {
+  const { comment } = req.body;
+  const { id } = req.params;
+  const { id: userId, name, username } = req.user;
+  const event = await listEventByID(id);
+
+  console.log(userId);
+  const registered = await register({
+    registrant: userId,
+    comment,
+    event: event.id,
+  });
+
+  if (registered) {
+    const registration = { name, username, ...registered };
+    return res.json({ success: true, registration });
+  }
+
+  return res.status(500).json({ error: 'Server error' });
+}
+
+async function deleteRegistrationRoute(req, res) {
+  console.log(req.user);
+  const { id } = req.params;
+  const { id: userId, name, username } = req.user;
+  const deleted = await removeUserRegistration(id, userId);
+  if (deleted) {
+    const deletedRegistration = { name, username, ...deleted };
+    return res.json({ success: true, deletedRegistration });
   }
 
   return res.json({ success: false });
@@ -141,4 +188,26 @@ router.delete(
   validateResourceExists(getEventRoute),
   validationCheck,
   catchErrors(deleteRoute)
+);
+
+router.post(
+  '/:id/register',
+  requireAuthentication,
+  idValidator('id'),
+  validateResourceExists(getEventRoute),
+  validateResourceNotExists(getRegistration),
+  bookingValidationMiddleware,
+  xssSanitizationMiddleware(['comment']),
+  validationCheck,
+  sanitizationMiddleware(['comment']),
+  catchErrors(registerRoute)
+);
+
+router.delete(
+  '/:id/register',
+  requireAuthentication,
+  validateResourceExists(getEventRoute),
+  validateResourceExists(getRegistration),
+  validationCheck,
+  catchErrors(deleteRegistrationRoute)
 );

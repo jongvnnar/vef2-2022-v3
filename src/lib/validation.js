@@ -23,6 +23,10 @@ export function registrationValidationMiddleware(textField) {
   ];
 }
 
+export const bookingValidationMiddleware = body('comment')
+  .isLength({ max: 400 })
+  .withMessage('Athugasemd má að hámarki vera 400 stafir.');
+
 export function idValidator(idName) {
   return [
     param(idName)
