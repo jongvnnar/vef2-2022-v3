@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import passport from './auth/passport.js';
 import { router as userRouter } from './routes/user-routes.js';
+
 dotenv.config();
 
 const { PORT: port = 3000, DATABASE_URL: connectionString } = process.env;
