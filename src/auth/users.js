@@ -67,3 +67,18 @@ export async function createUser(name, username, password) {
 
   return null;
 }
+
+export async function listUsers() {
+  const q = `
+  SELECT id, name, username, admin FROM users ORDER BY id ASC;
+  `;
+
+  try {
+    const result = await query(q);
+    console.log(result);
+    return result.rows;
+  } catch (e) {
+    console.error('Gat ekki fundið lista af notendum');
+  }
+  return null;
+}

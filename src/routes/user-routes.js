@@ -1,7 +1,17 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { jwtOptions, tokenOptions } from '../auth/passport.js';
-import { createUser, findById, findByUsername } from '../auth/users.js';
+import {
+  jwtOptions,
+  requireAdmin,
+  requireAuthentication,
+  tokenOptions,
+} from '../auth/passport.js';
+import {
+  createUser,
+  findById,
+  findByUsername,
+  listUsers,
+} from '../auth/users.js';
 import {
   loginSanitization,
   loginXssSanitization,
@@ -19,10 +29,16 @@ import { validationCheck } from '../lib/validation-helpers.js';
 
 export const router = express.Router();
 
-async function registerRoute(req, res) {
-  const { username, email, password = '' } = req.body;
+//TODO breyta þessu í paging.
+async function userRoute(req, res) {
+  const userList = await listUsers();
+  return res.status(200).json(userList);
+}
 
-  const result = await createUser(username, email, password);
+async function registerRoute(req, res) {
+  const { name, username, password = '' } = req.body;
+
+  const result = await createUser(name, username, password);
 
   delete result.password;
 
@@ -64,15 +80,14 @@ async function currentUserRoute(req, res) {
   return res.json(user);
 }
 
-// router.post(
-//   '/users/register',
-//   usernameValidator,
-//   emailValidator,
-//   passwordValidator,
-//   usernameDoesNotExistValidator,
-//   validationCheck,
-//   catchErrors(registerRoute)
-// );
+router.post(
+  '/register',
+  usernameValidator,
+  passwordValidator,
+  usernameDoesNotExistValidator,
+  validationCheck,
+  catchErrors(registerRoute)
+);
 
 router.post(
   '/login',
@@ -84,6 +99,8 @@ router.post(
   loginSanitization,
   catchErrors(loginRoute)
 );
+
+router.get('', requireAuthentication, requireAdmin, catchErrors(userRoute));
 
 // router.get('/users/me', requireAuthentication, catchErrors(currentUserRoute));
 
