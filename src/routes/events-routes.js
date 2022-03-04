@@ -1,6 +1,15 @@
 import express from 'express';
+import { requireAuthentication } from '../auth/passport.js';
 import { catchErrors } from '../lib/catch-errors.js';
-import { listEvents, listRegistered } from '../lib/db.js';
+import { createEvent, listEvents, listRegistered } from '../lib/db.js';
+import { slugify } from '../lib/slugify.js';
+import { validationCheck } from '../lib/validation-helpers.js';
+import {
+  noDuplicateEventsValidator,
+  registrationValidationMiddleware,
+  sanitizationMiddleware,
+  xssSanitizationMiddleware,
+} from '../lib/validation.js';
 
 export const router = express.Router();
 
@@ -19,4 +28,23 @@ async function getEventsRoute(req, res) {
   return res.json(result);
 }
 
+async function postEventsRoute(req, res) {
+  const { name, description } = req.body;
+  const { id = null } = req.user;
+  const slug = slugify(name);
+  const created = await createEvent({ name, slug, description, id });
+
+  return res.json(created);
+}
+
 router.get('', catchErrors(getEventsRoute));
+router.post(
+  '',
+  requireAuthentication,
+  registrationValidationMiddleware('description'),
+  xssSanitizationMiddleware(['name', 'description']),
+  noDuplicateEventsValidator,
+  validationCheck,
+  sanitizationMiddleware(['name', 'description']),
+  catchErrors(postEventsRoute)
+);

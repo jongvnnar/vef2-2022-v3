@@ -1,18 +1,20 @@
-CREATE TABLE public.events (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(64) NOT NULL UNIQUE,
-  slug VARCHAR(64) NOT NULL UNIQUE,
-  description TEXT,
-  created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TABLE public.users (
   id serial primary key,
   name VARCHAR(64) NOT NULL,
   username character varying(64) NOT NULL UNIQUE,
   password character varying(256) NOT NULL,
   admin boolean NOT NULL DEFAULT false
+);
+
+CREATE TABLE public.events (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(64) NOT NULL UNIQUE,
+  slug VARCHAR(64) NOT NULL UNIQUE,
+  description TEXT,
+  createdBy INTEGER NOT NULL,
+  created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT createdBy FOREIGN KEY (createdBy) REFERENCES users (id)
 );
 
 CREATE TABLE public.registrations (

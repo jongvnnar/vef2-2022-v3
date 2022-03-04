@@ -1,5 +1,6 @@
 import { body, param } from 'express-validator';
 import xss from 'xss';
+import { listEventByName } from './db.js';
 
 // Endurnýtum mjög líka validation
 
@@ -29,6 +30,16 @@ export function idValidator(idName) {
       .withMessage(`${idName} must be an integer larger than 0`),
   ];
 }
+
+export const noDuplicateEventsValidator = body('name').custom(async (value) => {
+  const eventExists = await listEventByName(value);
+  if (eventExists) {
+    return Promise.reject(
+      new Error('Viðburður með þessu nafni er nú þegar til')
+    );
+  }
+  return Promise.resolve();
+});
 
 // Viljum keyra sér og með validation, ver gegn „self XSS“
 export function xssSanitizationMiddleware(fields) {

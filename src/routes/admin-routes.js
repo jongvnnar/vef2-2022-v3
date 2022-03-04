@@ -49,44 +49,6 @@ function login(req, res) {
   return res.render('login', { message, title: 'Innskráning' });
 }
 
-async function validationCheck(req, res, next) {
-  const { name, description } = req.body;
-
-  const events = await listEvents();
-  const { user: { username } = {} } = req;
-
-  const data = {
-    name,
-    description,
-  };
-
-  const validation = validationResult(req);
-
-  const customValidations = [];
-
-  const eventNameExists = await listEventByName(name);
-
-  if (eventNameExists !== null) {
-    customValidations.push({
-      param: 'name',
-      msg: 'Viðburður með þessu nafni er til',
-    });
-  }
-
-  if (!validation.isEmpty() || customValidations.length > 0) {
-    return res.render('admin', {
-      events,
-      username,
-      title: 'Viðburðir — umsjón',
-      data,
-      errors: validation.errors.concat(customValidations),
-      admin: true,
-    });
-  }
-
-  return next();
-}
-
 async function validationCheckUpdate(req, res, next) {
   const { name, description } = req.body;
   const { slug } = req.params;
