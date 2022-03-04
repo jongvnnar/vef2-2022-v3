@@ -9,6 +9,7 @@
     "start": "dotenv -e .env node ./src/app.js",
     "setup": "dotenv -e .env node ./src/setup.js",
     "build": "npm run setup",
+    "setup-test": "dotenv -e .env.test node ./src/setup.js && dotenv -e .env.test node ./src/app.js",
     "test": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' dotenv -e .env.test -- jest ./*.test.js",
     "test-watch": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' dotenv -e .env.test -- jest ./*.test.js",
     "coverage": "NODE_ENV=test NODE_OPTIONS='--experimental-vm-modules' dotenv -e .env.test -- jest --coverage --collectCoverageFrom=\"./src/**/*.js\"",
@@ -40,6 +41,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.4",
     "jest": "^27.4.7",
+    "node-fetch": "^3.2.1",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1"
   }

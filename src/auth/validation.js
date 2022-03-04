@@ -11,8 +11,8 @@ export const nameValidator = body('name')
   .withMessage('name is required, max 64 characters');
 
 export const passwordValidator = body('password')
-  .isLength({ min: 1, max: 256 })
-  .withMessage('password is required, min 10 characters, max 256 characters');
+  .isLength({ min: 6, max: 256 })
+  .withMessage('password is required, min 6 characters, max 256 characters');
 
 export const usernameDoesNotExistValidator = body('username').custom(
   async (username) => {
